@@ -1,6 +1,8 @@
 import sv_ttk
 import tkinter as tk
 
+from interview_bot import InterviewManager
+
 
 class ChatApplication:
 
@@ -25,7 +27,7 @@ class ChatApplication:
     
     def _setup_start_page(self):
         # head_label
-        head_label = tk.Label(self.start_page, text="What job are you applying for?", pady=10)
+        head_label = tk.Label(self.start_page, text="What position are you interviewing for?", pady=10)
         head_label.place(relwidth=1)
 
         # tiny divider
@@ -90,28 +92,70 @@ class ChatApplication:
         y_cordinate = int((self.window.winfo_screenheight() / 2) - (self.window.winfo_height() / 2))
         self.window.geometry("+{}+{}".format(x_cordinate, y_cordinate - 20))
         
-    
     def _on_enter_pressed(self, event):
         msg = self.msg_entry.get()
-        self._insert_message(msg, "Applicant")
+        self._insert_apllicant_response(msg)
+        self._insert_feedback()
+        self._insert_question()
     
     def _on_entered_position(self, event):
         self.pos = self.position_entry.get()
         self.chat_page.lift()
-        
-    def _insert_message(self, msg, sender):
+        self._start_interview(self.pos)
+
+    def _start_interview(self, pos):
+        self.interview_manager = InterviewManager(pos)
+        start_msg = self.interview_manager.interview_greeting
+        self.text_widget.configure(state=tk.NORMAL)
+        self.text_widget.insert(tk.END, start_msg)
+        self.text_widget.configure(state=tk.DISABLED)
+    
+    def _insert_apllicant_response(self, msg):
         if not msg:
             return
         
         self.msg_entry.delete(0, tk.END)
-        msg1 = f"{sender}: {msg}\n\n"
+        answer = f" {msg}\n\n"
+        self.interview_manager.add_applicant_response_to_log(msg)
         self.text_widget.configure(state=tk.NORMAL)
-        self.text_widget.insert(tk.END, msg1)
+        self.text_widget.insert(tk.END, answer)
+        self.text_widget.configure(state=tk.DISABLED)
+        self.text_widget.see(tk.END)
+    
+    def _insert_feedback(self):
+        feedback = self.interview_manager.get_feedback_line()
+        self.text_widget.configure(state=tk.NORMAL)
+        self.text_widget.insert(tk.END, feedback)
+        self.text_widget.configure(state=tk.DISABLED)
+        self.text_widget.see(tk.END)
+    
+    def _insert_question(self):
+        question = self.interview_manager.get_next_question_line()
+        self.text_widget.configure(state=tk.NORMAL)
+        self.text_widget.insert(tk.END, question)
+        self.text_widget.insert(tk.END, self.interview_manager.APPLICANT_START)
+        self.text_widget.configure(state=tk.DISABLED)
+        self.text_widget.see(tk.END)
+        self.interview_manager.add_question_to_log(question)
+
+    def _insert_message(self, msg):
+        if not msg:
+            return
+        
+        self.msg_entry.delete(0, tk.END)
+        answer = f"{msg}\n\n"
+        self.interview_manager.add_applicant_response_to_log(msg)
+        self.text_widget.configure(state=tk.NORMAL)
+        self.text_widget.insert(tk.END, answer)
         self.text_widget.configure(state=tk.DISABLED)
         
-        msg2 = f"bot: placeholder\n\n"
+        feedback = self.interview_manager.get_feedback_line()
+        question = self.interview_manager.get_next_question_line()
+        self.interview_manager.add_question_to_log(question)
         self.text_widget.configure(state=tk.NORMAL)
-        self.text_widget.insert(tk.END, msg2)
+        self.text_widget.insert(tk.END, feedback)
+        self.text_widget.insert(tk.END, question)
+        self.text_widget.insert(tk.END, self.interview_manager.APPLICANT_START)
         self.text_widget.configure(state=tk.DISABLED)
         
         self.text_widget.see(tk.END)
