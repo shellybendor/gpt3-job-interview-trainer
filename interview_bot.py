@@ -89,7 +89,4 @@ if __name__ == '__main__':
   while(True):
     feedback = get_feeback(FEEDBACK_INTRO, log_of_interview)
     log_of_interview = get_applicant_response(log_of_interview, feedback, next_question)
-    # log_of_interview += f"{INTERVIEWER_START} {next_question}\n{APPLICANT_START}"
-    # applicant_response = input(f"{FEEDBACK_START} {feedback}\n{INTERVIEWER_START} {next_question}\n{APPLICANT_START} ")
-    # log_of_interview += f" {applicant_response}\n"
     next_question = respond(interview_intro, log_of_interview)
