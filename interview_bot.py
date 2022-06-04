@@ -3,6 +3,16 @@ import os
 import openai
 
 
+class InterviewManager:
+      INTERVIEWER_START = "Interview Trainer:"
+      APPLICANT_START = "Applicant:"
+      FEEDBACK_START = "Feedback:"
+      FEEDBACK_INTRO = "You are a job interview trainer, helping an applicant practice interviewing for a job. You give feedback on the answers the applicant gives to the questions.\n\n"
+
+      def __init__(self):
+            pass
+
+
 INTERVIEWER_START = "Interview Trainer:"
 APPLICANT_START = "Applicant:"
 FEEDBACK_START = "Feedback:"
