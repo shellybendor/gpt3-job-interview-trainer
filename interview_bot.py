@@ -52,7 +52,6 @@ class InterviewManager:
       def add_question_to_log(self, question):
             self.interiew_log += f"{question}{self.APPLICANT_START}"
             self.feedback_log += f"{question}{self.APPLICANT_START}"
-            # print(f"LOGGGG: \n{self.interiew_log}")
 
       def run(self):
             applicant_response = input(self.interview_greeting)

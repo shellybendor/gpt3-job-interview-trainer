@@ -65,12 +65,12 @@ class ChatApplication:
 
         # scroll bar
         scrollbar = tk.Scrollbar(self.text_widget)
-        scrollbar.place(relheight=1, relx=0.974)
+        scrollbar.place(relheight=1, relx=0.99)
         scrollbar.configure(command=self.text_widget.yview)
 
         # bottom Label
         bottom_label = tk.Label(self.chat_page, height=100)
-        bottom_label.place(relwidth=1, rely=0.825)
+        bottom_label.place(relwidth=1, rely=0.8)
 
         # message entry box
         self.msg_entry = tk.Entry(bottom_label)
