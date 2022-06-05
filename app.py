@@ -63,11 +63,6 @@ class ChatApplication:
         self.text_widget.place(relheight=0.745, relwidth=1, rely=0.08)
         self.text_widget.configure(cursor="arrow", state=tk.DISABLED)
 
-        # scroll bar
-        scrollbar = tk.Scrollbar(self.text_widget)
-        scrollbar.place(relheight=1, relx=0.99)
-        scrollbar.configure(command=self.text_widget.yview)
-
         # bottom Label
         bottom_label = tk.Label(self.chat_page, height=100)
         bottom_label.place(relwidth=1, rely=0.8)
@@ -95,8 +90,7 @@ class ChatApplication:
     def _on_enter_pressed(self, event):
         msg = self.msg_entry.get()
         self._insert_apllicant_response(msg)
-        self._insert_feedback()
-        self._insert_question()
+        self._insert_feedback_and_question()
     
     def _on_entered_position(self, event):
         self.pos = self.position_entry.get()
@@ -122,43 +116,19 @@ class ChatApplication:
         self.text_widget.configure(state=tk.DISABLED)
         self.text_widget.see(tk.END)
     
-    def _insert_feedback(self):
+    def _insert_feedback_and_question(self):
         feedback = self.interview_manager.get_feedback_line()
         self.text_widget.configure(state=tk.NORMAL)
         self.text_widget.insert(tk.END, feedback)
         self.text_widget.configure(state=tk.DISABLED)
         self.text_widget.see(tk.END)
-    
-    def _insert_question(self):
         question = self.interview_manager.get_next_question_line()
         self.text_widget.configure(state=tk.NORMAL)
         self.text_widget.insert(tk.END, question)
         self.text_widget.insert(tk.END, self.interview_manager.APPLICANT_START)
         self.text_widget.configure(state=tk.DISABLED)
         self.text_widget.see(tk.END)
-        self.interview_manager.add_question_to_log(question)
-
-    def _insert_message(self, msg):
-        if not msg:
-            return
-        
-        self.msg_entry.delete(0, tk.END)
-        answer = f"{msg}\n\n"
-        self.interview_manager.add_applicant_response_to_log(msg)
-        self.text_widget.configure(state=tk.NORMAL)
-        self.text_widget.insert(tk.END, answer)
-        self.text_widget.configure(state=tk.DISABLED)
-        
-        feedback = self.interview_manager.get_feedback_line()
-        question = self.interview_manager.get_next_question_line()
-        self.interview_manager.add_question_to_log(question)
-        self.text_widget.configure(state=tk.NORMAL)
-        self.text_widget.insert(tk.END, feedback)
-        self.text_widget.insert(tk.END, question)
-        self.text_widget.insert(tk.END, self.interview_manager.APPLICANT_START)
-        self.text_widget.configure(state=tk.DISABLED)
-        
-        self.text_widget.see(tk.END)
+        self.interview_manager.add_to_log(question, feedback)
 
 
 if __name__ == "__main__":
