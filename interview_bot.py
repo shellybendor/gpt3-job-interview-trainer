@@ -13,11 +13,14 @@ class InterviewManager:
       FEEDBACK_START = "Feedback:"
       FEEDBACK_INTRO = "You are a job interview feedback bot, helping an applicant practice interviewing for a job. After each question you give feedback on the answers the applicant gives.\n\n"
 
-      def __init__(self, pos):
+      def __init__(self, pos, use_few_shot=False):
             self.interview_intro = f"You are a job interviewer, interviewing an applicant for a job as a {pos}.\n\n"
             self.interview_greeting = f"{self.INTERVIEWER_START} Hello and thank you for taking the time to interview with us today for the position of a {pos}.\n\n{self.APPLICANT_START} "
             self.interiew_log = self.interview_greeting
             self.feedback_log = self.interview_greeting
+            if use_few_shot:
+                  with open(".few_shot.txt", "r") as f:
+                        self.feedback_log = f.readlines()
 
       def get_next_question_line(self):
             response = openai.Completion.create(
